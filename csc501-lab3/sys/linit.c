@@ -26,7 +26,7 @@ void linit()
 		
 		for (j=0;j<NPROC;j++)
 		{
-			lptr->lproc_list[j] = 0;
+			lptr->process_map[j] = 0;
 		}	
 	}
 

@@ -31,7 +31,7 @@ int releaseall (int numlocks, long lks,...)
 		else
 		{
 			lptr = &locks[ld];
-			if (lptr->lproc_list[currpid] == 1)
+			if (lptr->process_map[currpid] == 1)
 			{
 				releaseLDForProc(currpid, ld);					
 			}
@@ -64,7 +64,7 @@ void releaseLDForProc(int pid, int ld)
 	pptr = &proctab[pid];
 
 	lptr->ltype = DELETED;
-	lptr->lproc_list[pid] = 0;
+	lptr->process_map[pid] = 0;
 	
 	pptr->bm_locks[ld] = 0;
 	pptr->wait_lockid = -1;
@@ -106,7 +106,7 @@ void releaseLDForProc(int pid, int ld)
 				nptr->bm_locks[ld] = 1;
 
  				lptr->ltype = READ;
-				lptr->lproc_list[prev] = 1;
+				lptr->process_map[prev] = 1;
 				nptr->wait_time = 0;
 				nptr->wait_lockid = -1;
 				nptr->wait_ltype = -1;
@@ -128,7 +128,7 @@ void releaseLDForProc(int pid, int ld)
 				{
 					for (i = 0;i < NPROC;i++)
 					{
-						if (lptr->lproc_list[i] == 1)
+						if (lptr->process_map[i] == 1)
 						{
 							readerProcHoldingLock = 1;
 							break;
@@ -143,7 +143,7 @@ void releaseLDForProc(int pid, int ld)
 						nptr->bm_locks[ld] = 1;
 	
  						lptr->ltype = WRITE;
-						lptr->lproc_list[wpid] = 1;
+						lptr->process_map[wpid] = 1;
 						nptr->wait_time = 0;
 						nptr->wait_lockid = -1;
 						nptr->wait_ltype = -1;
@@ -163,7 +163,7 @@ void releaseLDForProc(int pid, int ld)
 						nptr->bm_locks[ld] = 1;
 
  						lptr->ltype = READ;
-						lptr->lproc_list[prev] = 1;
+						lptr->process_map[prev] = 1;
 						nptr->wait_time = 0;
 						nptr->wait_lockid = -1;
 						nptr->wait_ltype = -1;
@@ -184,7 +184,7 @@ void releaseLDForProc(int pid, int ld)
 					nptr->bm_locks[ld] = 1;
 
  					lptr->ltype = READ;
-					lptr->lproc_list[prev] = 1;
+					lptr->process_map[prev] = 1;
 					nptr->wait_time = 0;
 					nptr->wait_lockid = -1;
 					nptr->wait_ltype = -1;

@@ -23,7 +23,7 @@ int lock (int ldes1, int type, int priority)
 	{
 		lptr->ltype = type;
 		lptr->lprio = -1;
-		lptr->lproc_list[currpid] = 1;
+		lptr->process_map[currpid] = 1;
 
 		pptr->bm_locks[ldes1] = 1; 
 		pptr->wait_lockid = -1; 
@@ -72,7 +72,7 @@ int lock (int ldes1, int type, int priority)
 			{
 				lptr->ltype = type;
 				lptr->lprio = getMaxPriorityInLockWQ(ldes1); 
-				lptr->lproc_list[currpid] = 1;
+				lptr->process_map[currpid] = 1;
 
 				pptr->bm_locks[ldes1] = 1;
 				pptr->wait_lockid = -1; 
@@ -161,7 +161,7 @@ void rampUpProcPriority (int ld, int priority)
 
 	for (i=0;i<NPROC;i++)
 	{
-		if (lptr->lproc_list[i] == 1)
+		if (lptr->process_map[i] == 1)
 		{
 			pptr = &proctab[i];
 			gprio = getProcessPriority(pptr);

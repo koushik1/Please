@@ -25,9 +25,9 @@ SYSCALL ldelete(int lockdescriptor)
 
 	for (i=0;i<NPROC;i++)
 	{
-		if (lptr->lproc_list[i] == 1)
+		if (lptr->process_map[i] == 1)
 		{
-			lptr->lproc_list[i] = 0;
+			lptr->process_map[i] = 0;
 			proctab[i].bm_locks[lockdescriptor] = 0;
 		}
 	}	

@@ -22,7 +22,7 @@ struct	lentry	{
 	int	lqtail;		
 	int	ltype;		
 	int	lprio;		
-	int lproc_list[NPROC]; 
+	int process_map[NPROC]; 
 };
 extern	struct	lentry	locks[];
 extern	int	nextlock;
