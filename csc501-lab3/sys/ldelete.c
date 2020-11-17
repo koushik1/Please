@@ -14,7 +14,7 @@ SYSCALL ldelete(int lockdescriptor)
 	int i;
 
 	disable(ps);
-	if (isbadlock(lockdescriptor) || locks[lockdescriptor].lstate==LFREE) {
+	if ((lockdescriptor<0 || lockdescriptor>=NLOCKS) || locks[lockdescriptor].lstate==LFREE) {
 		restore(ps);
 		return(SYSERR);
 	}

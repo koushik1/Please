@@ -60,7 +60,7 @@ SYSCALL kill(int pid)
 
 	case PRWAIT:	semaph[pptr->psem].semcnt++;
 			ld = pptr->wait_lockid;
-			if (!isbadlock(ld))
+			if (ld>=0 || ld<NLOCKS))
 			{
 				pptr->pinh = 0;
 				releaseLDForWaitProc(pid,ld);

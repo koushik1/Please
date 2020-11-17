@@ -24,7 +24,7 @@ int releaseall (int numlocks, long lks,...)
 	{
 		ld = *a++;
 
-		if (isbadlock(ld)) 
+		if ((ld<0 || ld>=NLOCKS)) 
 		{
                		flag = 1;	   	
        		}

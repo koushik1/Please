@@ -12,7 +12,7 @@ int lock (int ldes1, int type, int priority)
 	struct pentry *pptr;
 	disable(ps);
 	
-	if (isbadlock(ldes1) || (lptr= &locks[ldes1])->lstate==LFREE) {
+	if ((ldes1<0 || ldes1>=NLOCKS) || (lptr= &locks[ldes1])->lstate==LFREE) {
 		restore(ps);
 		return(SYSERR);
 	}
@@ -233,7 +233,7 @@ int checkProcessTransitivityForPI (int pid)
 
 	pptr = &proctab[pid];
 	ld = pptr->wait_lockid;
-	if (isbadlock(ld))
+	if ((ld<0 || ld>=NLOCKS))
 	{
 		return -1;
 	}

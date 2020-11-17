@@ -22,11 +22,10 @@ struct	lentry	{
 	int	lqtail;		
 	int	ltype;		
 	int	lprio;		
-	int 	lproc_list[NPROC]; 
+	int lproc_list[NPROC]; 
 };
 extern	struct	lentry	locks[];
 extern	int	nextlock;
 extern unsigned long ctr1000;
-#define	isbadlock(s)	(s<0 || s>=NLOCKS)
 
 #endif
