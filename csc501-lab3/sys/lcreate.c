@@ -7,10 +7,6 @@
 
 LOCAL int newlock();
 
-/*------------------------------------------------------------------------
- * lcreate  --  create and initialize a lock, returning its id
- *------------------------------------------------------------------------
- */
 int lcreate()
 {
 	STATWORD ps;    
@@ -22,15 +18,11 @@ int lcreate()
 		return(SYSERR);
 	}
 	
-	/* lqhead and lqtail were initialized at system startup */
 	restore(ps);
 	return(ld);
 }
 
-/*------------------------------------------------------------------------
- * newlock  --  allocate an unused lock and return its index
- *------------------------------------------------------------------------
- */
+
 LOCAL int newlock()
 {
 	int	ld;

@@ -1,14 +1,13 @@
-/* lock.h - isbadlock */
 
 #ifndef _LOCK_H_
 #define _LOCK_H_
 
 #ifndef NLOCKS
-#define	NLOCKS		50	/* number of maximum locks */
+#define	NLOCKS		50	
 #endif
 
-#define	LFREE	'\01'		/* this lock is free		*/
-#define	LUSED	'\02'		/* this lock is used		*/
+#define	LFREE 1	
+#define	LUSED 2	
 
 #ifndef DELETED
 #define DELETED -6
@@ -17,13 +16,13 @@
 #define READ 0
 #define WRITE 1
 
-struct	lentry	{		/* lock table entry			*/
-	char	lstate;		/* the state LFREE or LUSED		*/
-	int	lqhead;		/* q index of head of list		*/
-	int	lqtail;		/* q index of tail of list		*/
-	int	ltype;		/* lock type READ or WRITE		*/
-	int	lprio;		/* maximum priority among lock's wait queue */
-	int 	lproc_list[NPROC]; /* bit mask of process ids currently holding the lock  */
+struct	lentry	{		
+	char	lstate;		
+	int	lqhead;		
+	int	lqtail;		
+	int	ltype;		
+	int	lprio;		
+	int 	lproc_list[NPROC]; 
 };
 extern	struct	lentry	locks[];
 extern	int	nextlock;

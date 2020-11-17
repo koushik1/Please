@@ -24,8 +24,6 @@ int releaseall (int numlocks, long lks,...)
 	{
 		ld = *a++;
 
-		//kprintf("%d",ld);
-		/* check if lock descriptor passed is valid or not and is held by the calling process */
 		if (isbadlock(ld)) 
 		{
                		flag = 1;	   	
@@ -65,11 +63,9 @@ void releaseLDForProc(int pid, int ld)
 	lptr = &locks[ld];
 	pptr = &proctab[pid];
 
-	/* set ltype deleted temporarily */
 	lptr->ltype = DELETED;
 	lptr->lproc_list[pid] = 0;
 	
-	/* release ld lock from bit mask */
 	pptr->bm_locks[ld] = 0;
 	pptr->wait_lockid = -1;
 	pptr->wait_ltype = -1;
@@ -84,7 +80,6 @@ void releaseLDForProc(int pid, int ld)
 		unsigned long tdf = 0;	
 		maxprio = q[q[prev].qprev].qkey;
 		
-		/* check writer proc exist in queue  */
 		while (q[prev].qprev != lptr->lqhead)
 		{
 			prev = q[prev].qprev;
@@ -127,9 +122,9 @@ void releaseLDForProc(int pid, int ld)
 				tdf = proctab[q[prev].qprev].wait_time - wptr->wait_time;
 				if (tdf < 0)
 				{
-					tdf = (-1)*tdf; /* make time difference positive */
+					tdf = (-1)*tdf; 
 				}
-				if (tdf < 1000) /* within 1 s */
+				if (tdf < 1000) 
 				{
 					for (i = 0;i < NPROC;i++)
 					{
@@ -210,7 +205,7 @@ void releaseLDForProc(int pid, int ld)
 	}
 	else
 	{
-		pptr->pinh = 0; /* as maxprio is either equal or less than original priority of pptr process */
+		pptr->pinh = 0; 
 	}
 	
 			

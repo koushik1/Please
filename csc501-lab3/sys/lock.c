@@ -19,35 +19,30 @@ int lock (int ldes1, int type, int priority)
 	
 	pptr = &proctab[currpid];
 
-        /* ltype = DELETED means it has not been acquired by any process yet for Read/Write but is created as lstate = LUSED  */
-	/* thus any process could get the lock */
 	if (lptr->ltype == DELETED)
 	{
 		lptr->ltype = type;
 		lptr->lprio = -1;
 		lptr->lproc_list[currpid] = 1;
 
-		pptr->bm_locks[ldes1] = 1; /* set bit mask corresponding to lock desc to 1 for the current process */
-		pptr->wait_lockid = -1; /* as it acquires lock it will take value -1  */
-		pptr->wait_pprio = priority; /* waiting priority for the lock queue */
-		pptr->wait_ltype = -1; /* as the current process is not being blocked */	 	
+		pptr->bm_locks[ldes1] = 1; 
+		pptr->wait_lockid = -1; 
+		pptr->wait_pprio = priority; 
+		pptr->wait_ltype = -1; 	
 	}
 	
-	/* already some process has acquired READ lock on the descriptor  */
 	else if (lptr->ltype == READ)
 	{
-		/* current process wants to acquire WRITE lock */
 		if (type == WRITE)
 		{
-			/* block the current process as WRITE lock is exclusive */
 			pptr->pstate = PRWAIT;
-			pptr->wait_lockid = ldes1;   /* process waiting on this lock id*/ 
-			pptr->wait_time = ctr1000;   /* waiting time start */	
-			pptr->wait_pprio = priority; /* waiting priority for the lock queue */
+			pptr->wait_lockid = ldes1;   
+			pptr->wait_time = ctr1000;   
+			pptr->wait_pprio = priority;
 			pptr->wait_ltype = type; 
 
-			insert(currpid, lptr->lqhead, priority); /* insert the proc in wait queue of lock descriptor based on its wait priority */
-			lptr->lprio = getMaxPriorityInLockWQ(ldes1); /* set lprio field to max priority process in wait queue of the lock */
+			insert(currpid, lptr->lqhead, priority); 
+			lptr->lprio = getMaxPriorityInLockWQ(ldes1); 
 			rampUpProcPriority(ldes1,getProcessPriority(pptr));
 
 			pptr->plockret = OK;
@@ -56,10 +51,8 @@ int lock (int ldes1, int type, int priority)
 			return pptr->plockret;
 		}		
 				
-		/* current process wants to acquire READ lock */
 		else if (type == READ)
 		{
-			/* check whether any higher write priority process is there in lock's wait queue */
 			int writerProcExist = 0;
 			int next = lptr->lqhead;
 			struct pentry *wptr;
@@ -75,32 +68,30 @@ int lock (int ldes1, int type, int priority)
 				}	
 			}
 			
-			/* there is no writer process having priority more than current process so assign READ lock */
 			if (writerProcExist == 0)
 			{
 				lptr->ltype = type;
-				lptr->lprio = getMaxPriorityInLockWQ(ldes1); /* set lprio field to max priority process in wait queue of the lock */
+				lptr->lprio = getMaxPriorityInLockWQ(ldes1); 
 				lptr->lproc_list[currpid] = 1;
 
-				pptr->bm_locks[ldes1] = 1; /* set bit mask corresponding to lock desc to 1 for the current process */
-				pptr->wait_lockid = -1; /* as it acquires lock it will take value -1  */
-				pptr->wait_pprio = priority; /* waiting priority for the lock queue */
-				pptr->wait_ltype = -1; /* as the current process is not being blocked */
+				pptr->bm_locks[ldes1] = 1;
+				pptr->wait_lockid = -1; 
+				pptr->wait_pprio = priority; 
+				pptr->wait_ltype = -1; 
 				rampUpProcPriority (ldes1,-1);	
 			}
 			
-			/* there is high wait priority writer process in queue so block current process */
 			if (writerProcExist == 1)
 			{
-				/* block the current process*/
 				pptr->pstate = PRWAIT;
-				pptr->wait_lockid = ldes1;   /* process waiting on this lock id*/ 
-				pptr->wait_time = ctr1000;   /* waiting time start */	
-				pptr->wait_pprio = priority; /* waiting priority for the lock queue */
+				pptr->wait_lockid = ldes1;   
+				pptr->wait_time = ctr1000;   
+				pptr->wait_pprio = priority;
 				pptr->wait_ltype = type; 
 
-				insert(currpid, lptr->lqhead, priority); /* insert the process in wait queue of lock based on its wait priority */
-				lptr->lprio = getMaxPriorityInLockWQ(ldes1); /* set lprio field to max priority process in wait queue of the lock */			               rampUpProcPriority(ldes1,getProcessPriority(pptr)); 		 
+				insert(currpid, lptr->lqhead, priority); 
+				lptr->lprio = getMaxPriorityInLockWQ(ldes1); 
+				rampUpProcPriority(ldes1,getProcessPriority(pptr)); 		 
 				
 				pptr->plockret = OK;
 				resched();
@@ -110,18 +101,16 @@ int lock (int ldes1, int type, int priority)
 		}			
 	}
 
-	/* already some process has acquired WRITE lock on the descriptor */
 	else if (lptr->ltype == WRITE)
 	{
-		/* block the current process as WRITE lock is exclusive */
 		pptr->pstate = PRWAIT;
-		pptr->wait_lockid = ldes1;   /* process waiting on this lock id*/ 
-		pptr->wait_time = ctr1000;   /* waiting time start */	
-		pptr->wait_pprio = priority; /* waiting priority for the lock queue */
+		pptr->wait_lockid = ldes1;   
+		pptr->wait_time = ctr1000;   
+		pptr->wait_pprio = priority; 
 		pptr->wait_ltype = type; 
 
-		insert(currpid, lptr->lqhead, priority); /* insert the process in wait queue of lock descriptor based on its wait priority */
-		lptr->lprio = getMaxPriorityInLockWQ(ldes1); /* set lprio field to max priority process in wait queue of the lock */
+		insert(currpid, lptr->lqhead, priority); 
+		lptr->lprio = getMaxPriorityInLockWQ(ldes1);
 		rampUpProcPriority(ldes1,getProcessPriority(pptr)); 
 		
 		pptr->plockret = OK;
@@ -177,8 +166,6 @@ void rampUpProcPriority (int ld, int priority)
 			pptr = &proctab[i];
 			gprio = getProcessPriority(pptr);
 			
-			/* priority will be -1 when called this func for priority inheritance but when called during lock func it will be */
-			/* priority of process currently blocked in lock func */
 		 	
 			if (priority == -1)
 			{
@@ -191,7 +178,7 @@ void rampUpProcPriority (int ld, int priority)
 				}
 				else
 				{
-					pptr->pinh = 0; /* as maxprio is either equal or less than original priority of pptr process */
+					pptr->pinh = 0; 
 				}
 				
 				tmpld = checkProcessTransitivityForPI(i);
@@ -201,7 +188,6 @@ void rampUpProcPriority (int ld, int priority)
 				}			 
 			}
 			
-			/* ramp up the priority of pptr upto priority passed */
 			else if (gprio < priority)
 			{
 				pptr->pinh = priority;
@@ -216,7 +202,6 @@ void rampUpProcPriority (int ld, int priority)
 
 }
 
-/* get max of p_i waiting on any of the locks held by process pid */
 int getMaxWaitProcPrioForPI (int pid)
 {
 	int i;
@@ -241,7 +226,6 @@ int getMaxWaitProcPrioForPI (int pid)
 	return maxprio;
 }
 
-/* check and get the lock id for which the process pid is in wait queue for priority inheritance  */
 int checkProcessTransitivityForPI (int pid)
 {
 	int ld;

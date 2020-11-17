@@ -22,7 +22,7 @@ SYSCALL ldelete(int lockdescriptor)
 	lptr->lstate = LFREE;
 	lptr->ltype = DELETED;
 	lptr->lprio = -1;
-	/* reset bit mask of process ids currently holding the lock */
+
 	for (i=0;i<NPROC;i++)
 	{
 		if (lptr->lproc_list[i] == 1)
