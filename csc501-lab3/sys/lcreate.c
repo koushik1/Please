@@ -40,8 +40,8 @@ LOCAL int newlock()
 		ld=nextlock--;
 		if (ld < 0)
 			nextlock = NLOCKS-1;
-		if (rw_locks[ld].lstate==LFREE) {
-			rw_locks[ld].lstate = LUSED;
+		if (locks[ld].lstate==LFREE) {
+			locks[ld].lstate = LUSED;
 			return(ld);
 		}
 	}

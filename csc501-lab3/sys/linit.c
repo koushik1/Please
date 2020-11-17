@@ -5,7 +5,7 @@
 #include <lock.h>
 #include <stdio.h>
 
-struct  lentry  rw_locks[NLOCKS];
+struct  lentry  locks[NLOCKS];
 
 void linit()
 {
@@ -18,7 +18,7 @@ void linit()
 	
 	for (i=0;i<NLOCKS;i++) /* initialize lock descriptors */
 	{
-		lptr = &rw_locks[i];
+		lptr = &locks[i];
 		lptr->lstate = 	LFREE;
 		lptr->lqtail = 1 + (lptr->lqhead = newqueue());
 		lptr->ltype = DELETED;

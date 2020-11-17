@@ -32,7 +32,7 @@ int releaseall (int numlocks, long lks,...)
        		}
 		else
 		{
-			lptr = &rw_locks[ld];
+			lptr = &locks[ld];
 			if (lptr->lproc_list[currpid] == 1)
 			{
 				releaseLDForProc(currpid, ld);					
@@ -62,7 +62,7 @@ void releaseLDForProc(int pid, int ld)
 	int maxprio = -1;
 	int i=0;
 
-	lptr = &rw_locks[ld];
+	lptr = &locks[ld];
 	pptr = &proctab[pid];
 
 	/* set ltype deleted temporarily */
@@ -221,7 +221,7 @@ void releaseLDForWaitProc(pid, ld)
 	struct lentry *lptr;
 	struct pentry *pptr;
 	
-	lptr = &rw_locks[ld];
+	lptr = &locks[ld];
 	pptr = &proctab[pid];
 
 	dequeue(pid);

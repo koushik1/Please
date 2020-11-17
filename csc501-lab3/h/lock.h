@@ -25,7 +25,7 @@ struct	lentry	{		/* lock table entry			*/
 	int	lprio;		/* maximum priority among lock's wait queue */
 	int 	lproc_list[NPROC]; /* bit mask of process ids currently holding the lock  */
 };
-extern	struct	lentry	rw_locks[];
+extern	struct	lentry	locks[];
 extern	int	nextlock;
 extern unsigned long ctr1000;
 #define	isbadlock(s)	(s<0 || s>=NLOCKS)
